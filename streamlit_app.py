@@ -79,6 +79,11 @@ st.set_page_config(layout="wide")
 st.title("Daily vs monthly sales, by product")
 st.markdown("This app shows the 2023 daily sales for Widget A through Widget Z.")
 
+uploaded_files = st.file_uploader("Upload multiple files", accept_multiple_files=True)
+
+if uploaded_files:
+   for uploaded_file in uploaded_files:
+       st.write("Filename: ", uploaded_file.name)
 data = get_data()
 daily, monthly = st.columns(2)
 with daily:
