@@ -4,6 +4,13 @@ import numpy as np
 from datetime import date, timedelta
 import string
 import time
+import torch
+from transformers import AutoImageProcessor, AutoModel
+from PIL import Image
+import faiss
+import os
+import matplotlib.pyplot as plt
+from collections import Counter
 
 
 @st.cache_data
@@ -76,17 +83,46 @@ def show_monthly_sales(data):
 
 st.set_page_config(layout="wide")
 
-st.title("Daily vs monthly sales, by product")
-st.markdown("This app shows the 2023 daily sales for Widget A through Widget Z.")
+st.title("Определение жанра музыки по фото обложки альбома")
+st.markdown("На текущий момент может определять 10 жанров (аниме, блэк метал, классика, кантри, диско, ЭДМ, джазз, поп, рэп, рэгги)")
 
 uploaded_files = st.file_uploader("Upload multiple files", accept_multiple_files=True)
 
 if uploaded_files:
    for uploaded_file in uploaded_files:
-       st.write("Filename: ", uploaded_file.name)
-data = get_data()
-daily, monthly = st.columns(2)
-with daily:
-    show_daily_sales(data)
-with monthly:
-    show_monthly_sales(data)
+        st.write("Filename: ", uploaded_file.name)
+        vector_2_use_filename='vector10.index'
+        target_genres_csv_filename='train_genres10.csv'
+        
+        target_genres_csv_filename= os.path.join(root_folder, 'train_genres'+str(genre_cnt)+'.csv')
+        target_train= pd.read_csv(target_genres_csv_filename)
+        
+        device = torch.device('cuda' if torch.cuda.is_available() else "cpu")
+        processor = AutoImageProcessor.from_pretrained('facebook/dinov2-small')
+        model = AutoModel.from_pretrained('facebook/dinov2-small').to(device)
+        
+        test_file_path= uploaded_file.name
+        st.write("Filename: ", test_file_path)
+        
+        image = Image.open(test_file_path)
+        #Extract the features
+        with torch.no_grad():
+            inputs = processor(images=image, return_tensors="pt").to(device)
+            outputs = model(**inputs)
+        #Normalize the features before search
+        embeddings = outputs.last_hidden_state
+        embeddings = embeddings.mean(dim=1)
+        vector = embeddings.detach().cpu().numpy()
+        vector = np.float32(vector)
+        faiss.normalize_L2(vector)
+        #Read the index file and perform search of top-1 images
+        index = faiss.read_index(vector_2_use_filename)
+        d,i = index.search(vector,5)
+        similar_elements_genres_arr=[]
+        #находим запись по индексу в тренировочном датафрейме и берем жанр наиболее часто встречающийся
+        for res in i[0]:
+            element= target_train.iloc[[res]]
+            genre= element['genre'].tolist()[0]
+            similar_elements_genres_arr.append(genre)
+        top_genre = Counter(similar_elements_genres_arr).most_common(1)[0][0]
+        st.write('predicted genre:', top_genre)
