@@ -1,3 +1,4 @@
+!pip install transformers faiss-gpu faiss-cpu torch Pillow collections -q
 import streamlit as st
 import pandas as pd
 import numpy as np
