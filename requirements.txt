@@ -1,5 +1,7 @@
+collections
+pillow
 torch
 transformers 
 faiss-cpu 
-Pillow 
-collections
+ 
+
