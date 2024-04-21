@@ -1,4 +1,3 @@
-collections
 pillow
 torch
 transformers 
