@@ -1,6 +1,5 @@
 torch
 transformers 
-faiss-gpu 
 faiss-cpu 
 Pillow 
 collections
