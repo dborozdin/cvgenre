@@ -93,8 +93,6 @@ if uploaded_files:
         st.write("Filename: ", uploaded_file.name)
         vector_2_use_filename='vector10.index'
         target_genres_csv_filename='train_genres10.csv'
-        
-        target_genres_csv_filename= os.path.join(root_folder, 'train_genres'+str(genre_cnt)+'.csv')
         target_train= pd.read_csv(target_genres_csv_filename)
         
         device = torch.device('cuda' if torch.cuda.is_available() else "cpu")
