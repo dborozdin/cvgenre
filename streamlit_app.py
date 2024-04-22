@@ -101,9 +101,9 @@ if uploaded_files:
         
         test_file_path= uploaded_file.name
         st.write("Filename: ", test_file_path)
-        st.image(test_file_path)
        
         image_data = uploaded_file.getvalue()
+        st.image(image_data)
         image = Image.frombytes('RGBA', (300,300), image_data, 'raw') #Image.open(test_file_path)
         #Extract the features
         with torch.no_grad():
