@@ -104,7 +104,8 @@ if uploaded_files:
        
         image_data = uploaded_file.getvalue()
         st.image(image_data)
-        image = Image.frombytes('RGB', (300,300), image_data, 'raw') #Image.open(test_file_path)
+        image= Image.open(BytesIO(image_data))
+        #image = Image.frombytes('RGB', (300,300), image_data, 'raw') #Image.open(test_file_path)
         #Extract the features
         with torch.no_grad():
             inputs = processor(images=image, return_tensors="pt").to(device)
