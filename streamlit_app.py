@@ -18,20 +18,17 @@ st.set_page_config(layout="wide")
 st.title("Определение жанра музыки по фото обложки альбома")
 st.markdown("На текущий момент может определять 10 жанров (аниме, блэк метал, классика, кантри, диско, ЭДМ, джазз, поп, рэп, рэгги)")
 
-uploaded_files = st.file_uploader("Загрузить файл...", accept_multiple_files=False)
+uploaded_files = st.file_uploader("Загрузите файлы...", accept_multiple_files=True)
 
 if uploaded_files:
+   vector_2_use_filename='vector10.index'
+   target_genres_csv_filename='train_genres10.csv'
+   target_train= pd.read_csv(target_genres_csv_filename)
+   device = torch.device('cuda' if torch.cuda.is_available() else "cpu")
+   processor = AutoImageProcessor.from_pretrained('facebook/dinov2-small')
+   model = AutoModel.from_pretrained('facebook/dinov2-small').to(device)
    for uploaded_file in uploaded_files:
-        vector_2_use_filename='vector10.index'
-        target_genres_csv_filename='train_genres10.csv'
-        target_train= pd.read_csv(target_genres_csv_filename)
-        
-        device = torch.device('cuda' if torch.cuda.is_available() else "cpu")
-        processor = AutoImageProcessor.from_pretrained('facebook/dinov2-small')
-        model = AutoModel.from_pretrained('facebook/dinov2-small').to(device)
-        
         test_file_path= uploaded_file.name
-       
         image_data = uploaded_file.getvalue()
         st.image(image_data)
         image= Image.open(BytesIO(image_data))
