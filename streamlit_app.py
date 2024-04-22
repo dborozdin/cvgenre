@@ -22,7 +22,6 @@ uploaded_files = st.file_uploader("Upload multiple files", accept_multiple_files
 
 if uploaded_files:
    for uploaded_file in uploaded_files:
-        st.write("Filename: ", uploaded_file.name)
         vector_2_use_filename='vector10.index'
         target_genres_csv_filename='train_genres10.csv'
         target_train= pd.read_csv(target_genres_csv_filename)
@@ -32,7 +31,6 @@ if uploaded_files:
         model = AutoModel.from_pretrained('facebook/dinov2-small').to(device)
         
         test_file_path= uploaded_file.name
-        st.write("Filename: ", test_file_path)
        
         image_data = uploaded_file.getvalue()
         st.image(image_data)
@@ -57,4 +55,4 @@ if uploaded_files:
             genre= element['genre'].tolist()[0]
             similar_elements_genres_arr.append(genre)
         top_genre = Counter(similar_elements_genres_arr).most_common(1)[0][0]
-        st.write('predicted genre:', top_genre)
+        st.write('Эта обложка относится к музыке жанра:', top_genre)
