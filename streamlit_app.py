@@ -14,17 +14,7 @@ from collections import Counter
 from io import BytesIO
 import fastai
 from fastai.vision.all import *
-
-from contextlib import contextmanager
 import pathlib
-
-@contextmanager
-def set_posix_windows():
-    posix_backup = pathlib.PosixPath
-    try:
-        pathlib.PosixPath = pathlib.WindowsPath
-    finally:
-        pathlib.PosixPath = posix_backup
 
 st.set_page_config(layout="wide")
 
@@ -44,10 +34,9 @@ if uploaded_files:
    EXPORT_PATH = pathlib.Path("fastai_model10.pkl")
    learn_inf=None
    canUseFASTAI=True
-   with set_posix_windows():
-    try:
+   try:
         learn_inf = load_learner(EXPORT_PATH)
-    except ValueError:
+   except ValueError:
         canUseFASTAI=False
         
    for uploaded_file in uploaded_files:
