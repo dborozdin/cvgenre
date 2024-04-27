@@ -33,7 +33,7 @@ if uploaded_files:
    processor = AutoImageProcessor.from_pretrained('facebook/dinov2-small')
    model = AutoModel.from_pretrained('facebook/dinov2-small').to(device)
 
-   learn_inf = load_learner('fastai_model10.pkl')
+   learn_inf = load_learner('.\fastai_model10.pkl', cpu=False)
    predictions=learn_inf.predict(img)
 
    for uploaded_file in uploaded_files:
