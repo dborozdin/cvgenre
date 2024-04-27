@@ -23,7 +23,6 @@ def set_posix_windows():
     posix_backup = pathlib.PosixPath
     try:
         pathlib.PosixPath = pathlib.WindowsPath
-        yield
     finally:
         pathlib.PosixPath = posix_backup
 
@@ -48,7 +47,6 @@ if uploaded_files:
    with set_posix_windows():
     try:
         learn_inf = load_learner(EXPORT_PATH)
-        break
     except ValueError:
         canUseFASTAI=False
         
