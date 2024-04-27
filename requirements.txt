@@ -5,5 +5,5 @@ transformers
 faiss-cpu 
 fastai
 torchvision
-torchvision.models
+fastbook
 
