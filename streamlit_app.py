@@ -12,6 +12,8 @@ import os
 import matplotlib.pyplot as plt
 from collections import Counter
 from io import BytesIO
+import fastai
+from fastai.vision.all import *
 
 st.set_page_config(layout="wide")
 
