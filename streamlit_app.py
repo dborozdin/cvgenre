@@ -31,7 +31,7 @@ if uploaded_files:
    model = AutoModel.from_pretrained('facebook/dinov2-small').to(device)
 
    learn_path= os.getcwd()
-   learn_inf = load_learner(learn_path/'fastai_model10.pkl')
+   learn_inf = load_learner(learn_path+os.path.sep+'fastai_model10.pkl')
    predictions=learn_inf.predict(img)
 
    for uploaded_file in uploaded_files:
