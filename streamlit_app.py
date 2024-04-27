@@ -15,6 +15,18 @@ from io import BytesIO
 import fastai
 from fastai.vision.all import *
 
+from contextlib import contextmanager
+import pathlib
+
+@contextmanager
+def set_posix_windows():
+    posix_backup = pathlib.PosixPath
+    try:
+        pathlib.PosixPath = pathlib.WindowsPath
+        yield
+    finally:
+        pathlib.PosixPath = posix_backup
+
 st.set_page_config(layout="wide")
 
 st.title("Определение жанра музыки по фото обложки альбома")
@@ -30,9 +42,10 @@ if uploaded_files:
    processor = AutoImageProcessor.from_pretrained('facebook/dinov2-small')
    model = AutoModel.from_pretrained('facebook/dinov2-small').to(device)
 
-   learn_path= os.getcwd()
-   learn_inf = load_learner(learn_path+os.path.sep+'fastai_model10.pkl')
-   predictions=learn_inf.predict(img)
+   EXPORT_PATH = pathlib.Path("fastai_model10.pkl")
+   learn_inf=None
+   with set_posix_windows():
+       learn_inf = load_learner(EXPORT_PATH)
 
    for uploaded_file in uploaded_files:
         test_file_path= uploaded_file.name
