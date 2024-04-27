@@ -14,9 +14,6 @@ from collections import Counter
 from io import BytesIO
 import fastai
 from fastai.vision.all import *
-import pathlib
-plt = platform.system()
-if plt == 'Windows': pathlib.PosixPath = pathlib.WindowsPath
 
 st.set_page_config(layout="wide")
 
