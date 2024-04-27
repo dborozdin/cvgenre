@@ -27,6 +27,10 @@ if uploaded_files:
    device = torch.device('cuda' if torch.cuda.is_available() else "cpu")
    processor = AutoImageProcessor.from_pretrained('facebook/dinov2-small')
    model = AutoModel.from_pretrained('facebook/dinov2-small').to(device)
+
+   learn_inf = load_learner('fastai_model10.pkl')
+   predictions=learn_inf.predict(img)
+
    for uploaded_file in uploaded_files:
         test_file_path= uploaded_file.name
         image_data = uploaded_file.getvalue()
@@ -52,4 +56,10 @@ if uploaded_files:
             genre= element['genre'].tolist()[0]
             similar_elements_genres_arr.append(genre)
         top_genre = Counter(similar_elements_genres_arr).most_common(1)[0][0]
-        st.write('Эта обложка относится к музыке жанра:', top_genre)
+        st.write('FAISS: эта обложка относится к музыке жанра:', top_genre)
+       
+        #fastAI
+        predictions=learn_inf.predict(image)
+        st.write('FAISS: эта обложка относится к музыке жанра:', predictions[0])
+
+      
