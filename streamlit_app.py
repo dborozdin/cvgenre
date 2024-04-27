@@ -44,9 +44,14 @@ if uploaded_files:
 
    EXPORT_PATH = pathlib.Path("fastai_model10.pkl")
    learn_inf=None
+   canUseFASTAI=True
    with set_posix_windows():
-       learn_inf = load_learner(EXPORT_PATH)
-
+    try:
+        learn_inf = load_learner(EXPORT_PATH)
+        break
+    except ValueError:
+        canUseFASTAI=False
+        
    for uploaded_file in uploaded_files:
         test_file_path= uploaded_file.name
         image_data = uploaded_file.getvalue()
@@ -75,7 +80,8 @@ if uploaded_files:
         st.write('FAISS: эта обложка относится к музыке жанра:', top_genre)
        
         #fastAI
-        predictions=learn_inf.predict(image)
-        st.write('FAISS: эта обложка относится к музыке жанра:', predictions[0])
+        if canUseFASTAI:
+            predictions=learn_inf.predict(image)
+            st.write('FAISS: эта обложка относится к музыке жанра:', predictions[0])
 
       
