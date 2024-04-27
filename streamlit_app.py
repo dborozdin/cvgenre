@@ -37,6 +37,7 @@ if uploaded_files:
    try:
         learn_inf = load_learner(EXPORT_PATH)
    except ValueError:
+        st.write('Ошибка загрузки модели:', ValueError)
         canUseFASTAI=False
         
    for uploaded_file in uploaded_files:
