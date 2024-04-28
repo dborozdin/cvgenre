@@ -21,8 +21,8 @@ st.set_page_config(layout="wide")
 st.title("Определение жанра музыки по фото обложки альбома")
 st.markdown("На текущий момент может определять 10 жанров (аниме, блэк метал, классика, кантри, диско, ЭДМ, джаз, поп, рэп, рэгги)")
 
-canUseFASTAI=True
 uploaded_files = st.file_uploader("Загрузите файлы...", accept_multiple_files=True)
+canUseFASTAI = st.checkbox('Использовать модель FASTAI')
 
 if uploaded_files:
    vector_2_use_filename='vector10.index'
