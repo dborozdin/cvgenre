@@ -21,7 +21,7 @@ st.set_page_config(layout="wide")
 st.title("Определение жанра музыки по фото обложки альбома")
 st.markdown("На текущий момент может определять 10 жанров (аниме, блэк метал, классика, кантри, диско, ЭДМ, джаз, поп, рэп, рэгги)")
 
-canUseFASTAI=False
+canUseFASTAI=True
 uploaded_files = st.file_uploader("Загрузите файлы...", accept_multiple_files=True)
 
 if uploaded_files:
