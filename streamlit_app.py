@@ -32,7 +32,8 @@ if uploaded_files:
    processor = AutoImageProcessor.from_pretrained('facebook/dinov2-small')
    model = AutoModel.from_pretrained('facebook/dinov2-small').to(device)
 
-   EXPORT_PATH = pathlib.Path("fastai_model10.pkl")
+   #EXPORT_PATH = pathlib.Path("fastai_model10.pkl")
+   EXPORT_PATH = "fastai_model10.pkl"
    learn_inf=None
 
    if canUseFASTAI==True:
