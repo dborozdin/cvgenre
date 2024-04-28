@@ -21,6 +21,7 @@ st.set_page_config(layout="wide")
 st.title("Определение жанра музыки по фото обложки альбома")
 st.markdown("На текущий момент может определять 10 жанров (аниме, блэк метал, классика, кантри, диско, ЭДМ, джаз, поп, рэп, рэгги)")
 
+canUseFASTAI=False
 uploaded_files = st.file_uploader("Загрузите файлы...", accept_multiple_files=True)
 
 if uploaded_files:
@@ -33,12 +34,13 @@ if uploaded_files:
 
    EXPORT_PATH = pathlib.Path("fastai_model10.pkl")
    learn_inf=None
-   canUseFASTAI=True
-   try:
-        learn_inf = load_learner(EXPORT_PATH)
-   except ValueError:
-        st.write('Ошибка загрузки модели:', ValueError)
-        canUseFASTAI=False
+
+   if canUseFASTAI==True:
+      try:
+           learn_inf = load_learner(EXPORT_PATH)
+      except ValueError:
+           st.write('Ошибка загрузки модели:', ValueError)
+           canUseFASTAI=False
         
    for uploaded_file in uploaded_files:
         test_file_path= uploaded_file.name
