@@ -12,6 +12,9 @@ import os
 import matplotlib.pyplot as plt
 from collections import Counter
 from io import BytesIO
+import fastai
+from fastai.vision.all import *
+import pathlib
 
 st.set_page_config(layout="wide")
 
@@ -27,6 +30,16 @@ if uploaded_files:
    device = torch.device('cuda' if torch.cuda.is_available() else "cpu")
    processor = AutoImageProcessor.from_pretrained('facebook/dinov2-small')
    model = AutoModel.from_pretrained('facebook/dinov2-small').to(device)
+
+   EXPORT_PATH = pathlib.Path("fastai_model10.pkl")
+   learn_inf=None
+   canUseFASTAI=True
+   try:
+        learn_inf = load_learner(EXPORT_PATH)
+   except ValueError:
+        st.write('Ошибка загрузки модели:', ValueError)
+        canUseFASTAI=False
+        
    for uploaded_file in uploaded_files:
         test_file_path= uploaded_file.name
         image_data = uploaded_file.getvalue()
@@ -52,4 +65,11 @@ if uploaded_files:
             genre= element['genre'].tolist()[0]
             similar_elements_genres_arr.append(genre)
         top_genre = Counter(similar_elements_genres_arr).most_common(1)[0][0]
-        st.write('Эта обложка относится к музыке жанра:', top_genre)
+        st.write('FAISS: эта обложка относится к музыке жанра:', top_genre)
+       
+        #fastAI
+        if canUseFASTAI:
+            predictions=learn_inf.predict(image)
+            st.write('FAISS: эта обложка относится к музыке жанра:', predictions[0])
+
+      
