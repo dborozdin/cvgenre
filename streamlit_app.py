@@ -22,8 +22,11 @@ st.title("Определение жанра музыки по фото обло�
 st.markdown("На текущий момент может определять 10 жанров (аниме, блэк метал, классика, кантри, диско, ЭДМ, джаз, поп, рэп, рэгги)")
 
 uploaded_files = st.file_uploader("Загрузите файлы...", accept_multiple_files=True)
+canUseFASTAI=st.checkbox('Использовать модель FASTAI')
+useDemoPictures = st.checkbox('Использовать демонстрационные данные')
+demo_files_list=['test_img1.png', 'test_img2.png', 'test_img3.png']
 
-if uploaded_files:
+if uploaded_files or useDemoPictures:
    vector_2_use_filename='vector10.index'
    target_genres_csv_filename='train_genres10.csv'
    target_train= pd.read_csv(target_genres_csv_filename)
@@ -31,18 +34,26 @@ if uploaded_files:
    processor = AutoImageProcessor.from_pretrained('facebook/dinov2-small')
    model = AutoModel.from_pretrained('facebook/dinov2-small').to(device)
 
-   EXPORT_PATH = pathlib.Path("fastai_model10.pkl")
-   learn_inf=None
-   canUseFASTAI=True
-   try:
-        learn_inf = load_learner(EXPORT_PATH)
-   except ValueError:
-        st.write('Ошибка загрузки модели:', ValueError)
-        canUseFASTAI=False
+   if canUseFASTAI:
+       EXPORT_PATH = pathlib.Path("./fastai_model10.pkl")
+       learn_inf=None
+       try:
+            learn_inf = load_learner(EXPORT_PATH)
+       except ValueError:
+            st.write('Ошибка загрузки модели:', ValueError)
+            canUseFASTAI=False
+   if useDemoPictures:
+        for demo_file in demo_files_list:
+            uploaded_files.append(open(demo_file, 'rb'))
+        
         
    for uploaded_file in uploaded_files:
         test_file_path= uploaded_file.name
-        image_data = uploaded_file.getvalue()
+        image_data=None
+        if useDemoPictures:
+            image_data = uploaded_file.read()
+        else:
+            image_data = uploaded_file.getvalue()
         st.image(image_data)
         image= Image.open(BytesIO(image_data))
         #Extract the features
