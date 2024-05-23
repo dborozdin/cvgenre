@@ -22,8 +22,8 @@ st.title("Определение жанра музыки по фото обло�
 st.markdown("На текущий момент может определять 10 жанров (аниме, блэк метал, классика, кантри, диско, ЭДМ, джаз, поп, рэп, рэгги)")
 
 uploaded_files = st.file_uploader("Загрузите файлы...", accept_multiple_files=True)
-canUseFASTAI=st.checkbox('Использовать модель FASTAI')
 useDemoPictures = st.checkbox('Использовать демонстрационные данные')
+canUseFASTAI=st.checkbox('Использовать модель FASTAI')
 demo_files_list=['test_img1.png', 'test_img2.png', 'test_img3.png']
 
 if uploaded_files or useDemoPictures:
