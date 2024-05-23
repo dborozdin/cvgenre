@@ -80,7 +80,7 @@ if uploaded_files or useDemoPictures:
        
         #fastAI
         if canUseFASTAI:
-            predictions=learn_inf.predict(image_data)
+            predictions=learn_inf.predict(image.convert('RGB'))
             st.write('FAISS: эта обложка относится к музыке жанра:', predictions[0])
 
       
